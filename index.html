@@ -1,0 +1,2279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Inter School Competition - Computer Science Quiz Competition">
+    <title>Inter School Competition - Computer Science Quiz Competition</title>
+
+    <!-- EmailJS -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+    <style>
+        :root {
+            --green: #176b45;
+            --green-dark: #0d4f32;
+            --green-light: #eaf6ef;
+            --skin: #f3d0b5;
+            --skin-light: #fff5ed;
+            --white: #ffffff;
+            --text: #17231d;
+            --muted: #68756e;
+            --border: #dfe9e3;
+            --shadow: 0 15px 45px rgba(23, 107, 69, 0.10);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            background:
+                radial-gradient(circle at top right, rgba(243, 208, 181, 0.30), transparent 28%),
+                linear-gradient(135deg, #ffffff 0%, #f7fbf8 55%, #eef8f2 100%);
+            color: var(--text);
+        }
+
+        button,
+        select,
+        input {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        /* =========================
+           HEADER
+        ========================== */
+
+        .topbar {
+            width: 100%;
+            height: 76px;
+            background: rgba(255, 255, 255, 0.97);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 28px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 18px rgba(23, 107, 69, 0.05);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            max-width: 100%;
+        }
+
+        .brand img {
+            width: 43px;
+            height: 43px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        .brand-line {
+            width: 1px;
+            height: 34px;
+            background: #cfdcd4;
+        }
+
+        .brand-title {
+            color: var(--green-dark);
+            font-weight: 700;
+            font-size: 15px;
+            letter-spacing: 0.1px;
+        }
+
+        /* =========================
+           MAIN
+        ========================== */
+
+        .page {
+            width: 100%;
+            max-width: 1050px;
+            margin: 0 auto;
+            padding: 45px 20px 60px;
+        }
+
+        .screen {
+            display: none;
+            animation: screenIn 0.45s ease both;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes screenIn {
+            from {
+                opacity: 0;
+                transform: translateX(25px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* =========================
+           WELCOME
+        ========================== */
+
+        .welcome-card {
+            max-width: 820px;
+            margin: 35px auto;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 26px;
+            box-shadow: var(--shadow);
+            padding: 65px 50px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, var(--green), var(--skin));
+        }
+
+        .welcome-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: var(--green-light);
+            color: var(--green-dark);
+            border: 1px solid #cfe7d9;
+            padding: 8px 15px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 22px;
+        }
+
+        .welcome-card h1 {
+            font-size: clamp(30px, 5vw, 48px);
+            line-height: 1.12;
+            color: var(--green-dark);
+            margin-bottom: 15px;
+        }
+
+        .welcome-card h1 span {
+            color: #b46f45;
+        }
+
+        .welcome-card p {
+            max-width: 650px;
+            margin: 0 auto 32px;
+            color: var(--muted);
+            line-height: 1.75;
+            font-size: 16px;
+        }
+
+        .exam-info {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 34px;
+        }
+
+        .info-chip {
+            padding: 10px 16px;
+            background: var(--skin-light);
+            border: 1px solid #f0d9c8;
+            color: #795039;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        /* =========================
+           BUTTONS
+        ========================== */
+
+        .primary-btn {
+            border: none;
+            background: linear-gradient(135deg, var(--green), var(--green-dark));
+            color: white;
+            padding: 14px 30px;
+            border-radius: 12px;
+            font-weight: 700;
+            min-width: 150px;
+            box-shadow: 0 8px 20px rgba(23, 107, 69, 0.20);
+            transition: 0.2s ease;
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 11px 24px rgba(23, 107, 69, 0.27);
+        }
+
+        .primary-btn:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* =========================
+           STUDENT DETAILS
+        ========================== */
+
+        .details-card {
+            max-width: 700px;
+            margin: 20px auto;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 42px;
+            box-shadow: var(--shadow);
+        }
+
+        .section-heading {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .section-heading h2 {
+            color: var(--green-dark);
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .section-heading p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .field-step {
+            display: none;
+            animation: fieldIn 0.35s ease both;
+        }
+
+        .field-step.active {
+            display: block;
+        }
+
+        @keyframes fieldIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .step-number {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--green-light);
+            color: var(--green-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-weight: 800;
+            font-size: 14px;
+        }
+
+        .field-label {
+            display: block;
+            text-align: center;
+            font-weight: 700;
+            color: var(--green-dark);
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+
+        .field-input,
+        .field-select {
+            width: 100%;
+            height: 54px;
+            border: 1.5px solid var(--border);
+            background: #fbfdfc;
+            border-radius: 12px;
+            padding: 0 16px;
+            outline: none;
+            color: var(--text);
+            transition: 0.2s ease;
+        }
+
+        .field-input:focus,
+        .field-select:focus {
+            border-color: var(--green);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(23, 107, 69, 0.08);
+        }
+
+        .field-select {
+            appearance: auto;
+        }
+
+        .step-progress {
+            display: flex;
+            justify-content: center;
+            gap: 7px;
+            margin: 28px 0;
+        }
+
+        .progress-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #d9e4dd;
+            transition: 0.25s ease;
+        }
+
+        .progress-dot.active {
+            width: 23px;
+            border-radius: 10px;
+            background: var(--green);
+        }
+
+        .details-actions {
+            text-align: center;
+        }
+
+        /* =========================
+           QUIZ HEADER
+        ========================== */
+
+        .quiz-shell {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .quiz-top {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 18px 22px;
+            box-shadow: 0 8px 25px rgba(23, 107, 69, 0.07);
+            margin-bottom: 18px;
+        }
+
+        .quiz-top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .quiz-counter {
+            color: var(--green-dark);
+            font-weight: 800;
+            font-size: 15px;
+        }
+
+        .timer {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--skin-light);
+            border: 1px solid #efd7c5;
+            color: #71472e;
+            padding: 9px 14px;
+            border-radius: 11px;
+            font-weight: 800;
+            min-width: 110px;
+            justify-content: center;
+        }
+
+        .timer-icon {
+            font-size: 15px;
+        }
+
+        .progress-track {
+            height: 7px;
+            background: #e8f0eb;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-top: 16px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 2%;
+            background: linear-gradient(90deg, var(--green), #4e9a73);
+            border-radius: 20px;
+            transition: width 0.4s ease;
+        }
+
+        /* =========================
+           QUESTION
+        ========================== */
+
+        .question-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 35px;
+            box-shadow: var(--shadow);
+            min-height: 480px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .question-number {
+            color: #a96b47;
+            font-weight: 800;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-size: clamp(20px, 3vw, 26px);
+            line-height: 1.45;
+            color: var(--green-dark);
+            font-weight: 700;
+            margin-bottom: 28px;
+        }
+
+        .options {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .option {
+            width: 100%;
+            min-height: 62px;
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            text-align: left;
+            background: #fbfdfc;
+            border: 1.5px solid var(--border);
+            border-radius: 13px;
+            padding: 13px 16px;
+            color: var(--text);
+            transition: 0.22s ease;
+        }
+
+        .option:hover:not(.locked) {
+            border-color: #9dcab0;
+            background: var(--green-light);
+            transform: translateX(2px);
+        }
+
+        .option-letter {
+            width: 34px;
+            height: 34px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            background: #edf3ef;
+            color: var(--green-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+        }
+
+        .option-text {
+            line-height: 1.45;
+            font-size: 15px;
+        }
+
+        .option.selected {
+            background: #e9f6ef;
+            border-color: var(--green);
+            box-shadow: 0 0 0 2px rgba(23, 107, 69, 0.08);
+        }
+
+        .option.selected .option-letter {
+            background: var(--green);
+            color: white;
+        }
+
+        .option.locked {
+            cursor: default;
+        }
+
+        .locked-note {
+            min-height: 24px;
+            color: var(--green);
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .quiz-actions {
+            margin-top: auto;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        /* =========================
+           TIME TOAST
+        ========================== */
+
+        .time-toast {
+            position: fixed;
+            top: 95px;
+            right: 22px;
+            z-index: 500;
+            max-width: 310px;
+            background: white;
+            border: 1px solid #d7e8dd;
+            border-left: 5px solid var(--green);
+            box-shadow: 0 12px 35px rgba(23, 107, 69, 0.16);
+            border-radius: 13px;
+            padding: 14px 17px;
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            transform: translateX(130%);
+            opacity: 0;
+            transition: 0.35s ease;
+        }
+
+        .time-toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .toast-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--green-light);
+            color: var(--green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+        }
+
+        .toast-text {
+            font-size: 13px;
+            line-height: 1.45;
+            color: var(--text);
+        }
+
+        /* =========================
+           SUBMISSION
+        ========================== */
+
+        .submission-card {
+            max-width: 650px;
+            margin: 50px auto;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 25px;
+            box-shadow: var(--shadow);
+            padding: 55px 35px;
+            text-align: center;
+        }
+
+        .success-icon {
+            width: 75px;
+            height: 75px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            background: var(--green-light);
+            color: var(--green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: 900;
+        }
+
+        .submission-card h2 {
+            color: var(--green-dark);
+            font-size: 30px;
+            margin-bottom: 12px;
+        }
+
+        .submission-card p {
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .submission-status {
+            margin-top: 25px;
+            padding: 13px 16px;
+            background: var(--green-light);
+            color: var(--green-dark);
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================== */
+
+        @media (max-width: 650px) {
+            .topbar {
+                height: 68px;
+                padding: 0 15px;
+            }
+
+            .brand img {
+                width: 37px;
+                height: 37px;
+            }
+
+            .brand-title {
+                font-size: 12px;
+                line-height: 1.35;
+            }
+
+            .page {
+                padding: 25px 13px 45px;
+            }
+
+            .welcome-card {
+                padding: 42px 22px;
+                margin: 15px auto;
+            }
+
+            .details-card {
+                padding: 30px 20px;
+            }
+
+            .question-card {
+                padding: 25px 18px;
+                min-height: 520px;
+            }
+
+            .quiz-top {
+                padding: 15px;
+            }
+
+            .quiz-top-row {
+                align-items: flex-start;
+            }
+
+            .timer {
+                min-width: 100px;
+            }
+
+            .question-text {
+                font-size: 20px;
+            }
+
+            .option {
+                min-height: 58px;
+            }
+
+            .time-toast {
+                left: 14px;
+                right: 14px;
+                top: 80px;
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         NAVIGATION BAR
+    ========================== -->
+    <header class="topbar">
+        <div class="brand">
+            <img src="isc.png" alt="ISC Logo">
+            <div class="brand-line"></div>
+            <div class="brand-title">
+                Inter School Competition - Computer Science Quiz Competition
+            </div>
+        </div>
+    </header>
+
+    <main class="page">
+
+        <!-- =========================
+             SCREEN 1 - WELCOME
+        ========================== -->
+        <section id="welcomeScreen" class="screen active">
+            <div class="welcome-card">
+
+                <div class="welcome-badge">
+                    ◆ OFFICIAL QUIZ PORTAL
+                </div>
+
+                <h1>
+                    Welcome to the<br>
+                    <span>Computer Science Quiz</span>
+                </h1>
+
+                <p>
+                    Please make sure you have enough time and a stable internet
+                    connection before starting the competition. Once an answer
+                    is selected, it will be locked and cannot be changed.
+                </p>
+
+                <div class="exam-info">
+                    <div class="info-chip">50 Questions</div>
+                    <div class="info-chip">50 Minutes</div>
+                    <div class="info-chip">One Question at a Time</div>
+                </div>
+
+                <button id="startBtn" class="primary-btn">
+                    Continue
+                </button>
+
+            </div>
+        </section>
+
+
+        <!-- =========================
+             SCREEN 2 - STUDENT DETAILS
+        ========================== -->
+        <section id="detailsScreen" class="screen">
+
+            <div class="details-card">
+
+                <div class="section-heading">
+                    <h2>Participant Information</h2>
+                    <p>Please enter your information one step at a time.</p>
+                </div>
+
+                <div class="step-progress">
+                    <span class="progress-dot active"></span>
+                    <span class="progress-dot"></span>
+                    <span class="progress-dot"></span>
+                    <span class="progress-dot"></span>
+                    <span class="progress-dot"></span>
+                </div>
+
+                <!-- NAME -->
+                <div class="field-step active" data-step="0">
+                    <div class="step-number">1</div>
+                    <label class="field-label" for="studentName">
+                        Full Name
+                    </label>
+
+                    <input
+                        id="studentName"
+                        class="field-input"
+                        type="text"
+                        autocomplete="name"
+                        placeholder="Enter your full name"
+                    >
+
+                    <div class="details-actions" style="margin-top:22px;">
+                        <button class="primary-btn next-detail">
+                            Next
+                        </button>
+                    </div>
+                </div>
+
+                <!-- CLASS -->
+                <div class="field-step" data-step="1">
+                    <div class="step-number">2</div>
+                    <label class="field-label" for="studentClass">
+                        Class
+                    </label>
+
+                    <select id="studentClass" class="field-select">
+                        <option value="">Select your class</option>
+                        <option>Grade 5</option>
+                        <option>Grade 6</option>
+                        <option>Grade 7</option>
+                        <option>Grade 8</option>
+                        <option>Grade 9</option>
+                        <option>Grade 10</option>
+                        <option>Grade 11</option>
+                        <option>Grade 12</option>
+                        <option>O Level</option>
+                        <option>A Level</option>
+                        <option>Other</option>
+                    </select>
+
+                    <div class="details-actions" style="margin-top:22px;">
+                        <button class="primary-btn next-detail">
+                            Next
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ROLL NO -->
+                <div class="field-step" data-step="2">
+                    <div class="step-number">3</div>
+                    <label class="field-label" for="rollNo">
+                        Roll Number
+                    </label>
+
+                    <input
+                        id="rollNo"
+                        class="field-input"
+                        type="text"
+                        autocomplete="off"
+                        placeholder="Enter your roll number"
+                    >
+
+                    <div class="details-actions" style="margin-top:22px;">
+                        <button class="primary-btn next-detail">
+                            Next
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SCHOOL -->
+                <div class="field-step" data-step="3">
+                    <div class="step-number">4</div>
+                    <label class="field-label" for="school">
+                        School / Institution
+                    </label>
+
+                    <input
+                        id="school"
+                        class="field-input"
+                        type="text"
+                        autocomplete="organization"
+                        placeholder="Enter your school name"
+                    >
+
+                    <div class="details-actions" style="margin-top:22px;">
+                        <button class="primary-btn next-detail">
+                            Next
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SUBJECT -->
+                <div class="field-step" data-step="4">
+                    <div class="step-number">5</div>
+                    <label class="field-label" for="subject">
+                        Subject
+                    </label>
+
+                    <select id="subject" class="field-select">
+                        <option value="">Select subject</option>
+
+                        <optgroup label="Computer & Technology">
+                            <option>Computer Science</option>
+                            <option>Information Technology</option>
+                            <option>Software Engineering</option>
+                            <option>Artificial Intelligence</option>
+                            <option>Data Science</option>
+                            <option>Cybersecurity</option>
+                            <option>Information Systems</option>
+                            <option>Computer Engineering</option>
+                            <option>Robotics</option>
+                            <option>Web Development</option>
+                            <option>Game Development</option>
+                        </optgroup>
+
+                        <optgroup label="Science">
+                            <option>General Science</option>
+                            <option>Physics</option>
+                            <option>Chemistry</option>
+                            <option>Biology</option>
+                            <option>Environmental Science</option>
+                            <option>Earth Science</option>
+                            <option>Astronomy</option>
+                            <option>Geology</option>
+                            <option>Botany</option>
+                            <option>Zoology</option>
+                        </optgroup>
+
+                        <optgroup label="Medical & Health">
+                            <option>Medicine</option>
+                            <option>Medical Science</option>
+                            <option>Nursing</option>
+                            <option>Pharmacy</option>
+                            <option>Public Health</option>
+                            <option>Physiology</option>
+                            <option>Anatomy</option>
+                            <option>Pathology</option>
+                            <option>Nutrition</option>
+                            <option>Medical Laboratory Science</option>
+                            <option>Radiology</option>
+                        </optgroup>
+
+                        <optgroup label="Mathematics">
+                            <option>Mathematics</option>
+                            <option>Applied Mathematics</option>
+                            <option>Statistics</option>
+                            <option>Calculus</option>
+                            <option>Algebra</option>
+                            <option>Geometry</option>
+                        </optgroup>
+
+                        <optgroup label="Engineering">
+                            <option>Engineering</option>
+                            <option>Civil Engineering</option>
+                            <option>Mechanical Engineering</option>
+                            <option>Electrical Engineering</option>
+                            <option>Electronics Engineering</option>
+                            <option>Chemical Engineering</option>
+                            <option>Industrial Engineering</option>
+                            <option>Architecture</option>
+                        </optgroup>
+
+                        <optgroup label="Business & Economics">
+                            <option>Business Studies</option>
+                            <option>Accounting</option>
+                            <option>Finance</option>
+                            <option>Economics</option>
+                            <option>Marketing</option>
+                            <option>Management</option>
+                            <option>Commerce</option>
+                            <option>Entrepreneurship</option>
+                        </optgroup>
+
+                        <optgroup label="Humanities & Social Sciences">
+                            <option>History</option>
+                            <option>Geography</option>
+                            <option>Political Science</option>
+                            <option>Sociology</option>
+                            <option>Psychology</option>
+                            <option>Philosophy</option>
+                            <option>Anthropology</option>
+                            <option>International Relations</option>
+                            <option>Civics</option>
+                        </optgroup>
+
+                        <optgroup label="Languages & Literature">
+                            <option>English</option>
+                            <option>English Literature</option>
+                            <option>Urdu</option>
+                            <option>Urdu Literature</option>
+                            <option>Arabic</option>
+                            <option>Persian</option>
+                            <option>French</option>
+                            <option>German</option>
+                            <option>Spanish</option>
+                            <option>Chinese</option>
+                            <option>Literature</option>
+                            <option>Linguistics</option>
+                        </optgroup>
+
+                        <optgroup label="Arts & Design">
+                            <option>Art</option>
+                            <option>Fine Arts</option>
+                            <option>Visual Arts</option>
+                            <option>Graphic Design</option>
+                            <option>Fashion Design</option>
+                            <option>Music</option>
+                            <option>Drama</option>
+                            <option>Photography</option>
+                            <option>Film Studies</option>
+                        </optgroup>
+
+                        <optgroup label="Education & Other">
+                            <option>Education</option>
+                            <option>Physical Education</option>
+                            <option>Religious Studies</option>
+                            <option>Islamic Studies</option>
+                            <option>Media Studies</option>
+                            <option>Journalism</option>
+                            <option>Home Economics</option>
+                            <option>General Knowledge</option>
+                            <option>Other</option>
+                        </optgroup>
+                    </select>
+
+                    <div class="details-actions" style="margin-top:22px;">
+                        <button id="beginQuizBtn" class="primary-btn">
+                            Start Quiz
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- =========================
+             SCREEN 3 - QUIZ
+        ========================== -->
+        <section id="quizScreen" class="screen">
+
+            <div class="quiz-shell">
+
+                <div class="quiz-top">
+
+                    <div class="quiz-top-row">
+
+                        <div class="quiz-counter" id="questionCounter">
+                            Question 1 of 50
+                        </div>
+
+                        <div class="timer">
+                            <span class="timer-icon">◷</span>
+                            <span id="timerDisplay">50:00</span>
+                        </div>
+
+                    </div>
+
+                    <div class="progress-track">
+                        <div id="progressFill" class="progress-fill"></div>
+                    </div>
+
+                </div>
+
+                <div class="question-card">
+
+                    <div class="question-number" id="questionLabel">
+                        Question 01
+                    </div>
+
+                    <div class="question-text" id="questionText"></div>
+
+                    <div id="optionsContainer" class="options"></div>
+
+                    <div id="lockedNote" class="locked-note"></div>
+
+                    <div class="quiz-actions">
+                        <button
+                            id="nextQuestionBtn"
+                            class="primary-btn"
+                            disabled
+                        >
+                            Next
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             SCREEN 4 - SUBMISSION
+        ========================== -->
+        <section id="submissionScreen" class="screen">
+
+            <div class="submission-card">
+
+                <div class="success-icon">✓</div>
+
+                <h2>Submission Completed</h2>
+
+                <p>
+                    Your quiz has been submitted successfully.
+                    Your result will be communicated by Administration.
+                </p>
+
+                <div class="submission-status">
+                    Result submitted to Administration.
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- TIME ANNOUNCEMENT -->
+    <div id="timeToast" class="time-toast">
+        <div class="toast-icon">i</div>
+        <div id="toastText" class="toast-text"></div>
+    </div>
+
+
+<script>
+/* =========================================================
+   EMAILJS CONFIGURATION
+========================================================= */
+
+const EMAILJS_PUBLIC_KEY = "EbZtfnsGnnIk2L0ez";
+const EMAILJS_SERVICE_ID = "service_d3kw61f";
+const EMAILJS_TEMPLATE_ID = "template_sw32x3d";
+
+emailjs.init({
+    publicKey: EMAILJS_PUBLIC_KEY
+});
+
+
+/* =========================================================
+   MCQ DATA
+   Topics/headings intentionally NOT included.
+========================================================= */
+
+const questions = [
+
+    {
+        q: "Which core component determines the machine cycle speed of a CPU?",
+        options: [
+            "System Clock",
+            "Control Unit",
+            "Bus Width",
+            "Register Size"
+        ],
+        answer: 0
+    },
+
+    {
+        q: "What is the fundamental difference between data and information?",
+        options: [
+            "Data is processed; information is raw facts.",
+            "Data is structured; information is unorganized.",
+            "Data is raw facts; information is processed data.",
+            "Data is qualitative; information is quantitative."
+        ],
+        answer: 2
+    },
+
+    {
+        q: "Which internal CPU unit executes binary arithmetic and logical comparison?",
+        options: [
+            "Control Unit",
+            "Arithmetic Logic Unit (ALU)",
+            "Internal Register",
+            "Memory Buffer Unit"
+        ],
+        answer: 1
+    },
+
+    {
+        q: "What occurs during the execution phase of a machine cycle?",
+        options: [
+            "CPU fetches instruction from RAM.",
+            "CPU decodes instruction into control signals.",
+            "CPU performs the operation on data.",
+            "CPU increments the program counter."
+        ],
+        answer: 2
+    },
+
+    {
+        q: "Which computer class measures continuous physical variables like voltage or pressure?",
+        options: [
+            "Digital Computer",
+            "Analog Computer",
+            "Hybrid Computer",
+            "Mainframe Computer"
+        ],
+        answer: 1
+    },
+
+    {
+        q: "What is the primary role of computer firmware?",
+        options: [
+            "To manage application programs and user files.",
+            "To provide permanent low-level hardware control code.",
+            "To speed up user interface rendering.",
+            "To convert high-level code into assembly code."
+        ],
+        answer: 1
+    },
+
+    {
+        q: "Which system architecture stores both computer program code and data in shared memory?",
+        options: [
+            "Harvard Architecture",
+            "Von Neumann Architecture",
+            "RISC Architecture",
+            "Pipeline Architecture"
+        ],
+        answer: 1
+    },
+
+    {
+        q: "Which early mechanical device used punch cards to automate complex patterns?",
+        options: [
+            "Babbage's Analytical Engine",
+            "Jacquard Loom",
+            "Hollerith Tabulating Machine",
+            "Pascaline"
+        ],
+        answer: 1
+    },
+
+    {
+        q: "Which core component defines First-Generation electronic computers?",
+        options: [
+            "Transistors",
+            "Integrated Circuits",
+            "Vacuum Tubes",
+            "Microprocessors"
+        ],
+        answer: 2
+    },
+
+    {
+        q: "Who is recognized as the world's first computer programmer?",
+        options: [
+            "Charles Babbage",
+            "Ada Lovelace",
+            "Alan Turing",
+            "John von Neumann"
+        ],
+        answer: 1
+    },
+
+    {
+        q: "Which machine was the first general-purpose electronic digital computer?",
+        options: [
+            "UNIVAC I",
+            "ENIAC",
+            "EDVAC",
+            "ABC (Atanasoff-Berry Computer)"
+        ],
+        answer: 1
+    },
+
+    {
+        q: "The commercial introduction of the single-chip microprocessor started which computer generation?",
+        options: [
+            "Second Generation",
+            "Third Generation",
+            "Fourth Generation",
+            "Fifth Generation"
+        ],
+        answer: 2
+    },
+
+    {
+        q: "Which technological breakthrough allowed Third-Generation computers to become significantly smaller?",
+        options: [
+            "Magnetic core memory",
+            "Vacuum tubes",
+            "Integrated Circuits (ICs)",
+            "Microprocessors"
+        ],
+        answer: 2
+    },
+
+    {
+        q: "Which software translator converts entire high-level source code into machine code before execution?",
+        options: [
+            "Interpreter",
+            "Compiler",
+            "Assembler",
+            "Linker"
+        ],
+        answer: 1
+    },
+
+    {
+        q: "System software that acts as an direct intermediary between application programs and physical hardware is:",
+        options: [
+            "Device Driver",
+            "Operating System",
+            "Utility Program",
+            "Firmware"
+        ],
+        answer: 1
+    },
+
+    {
+        q: "What software category includes tools like disk defragmenters and antivirus scanners?",
+        options: [
+            "Application Software",
+            "Utility Software",
+            "Embedded Software",
+            "Firmware Software"
+        ],
+        answer: 1
+    },
+
+    {
+        q: "What is the primary job of a software linker?",
+        options: [
+            "Translates code line-by-line during runtime.",
+            "Combines compiled object files into a single executable file.",
+            "Loads executable files directly into RAM.",
+            "Checks source code syntax errors."
+        ],
+        answer: 1
+    },
+
+    {
+        q: "Which system bus transfers memory address signals from CPU to system RAM?",
+        options: [
+            "Data Bus",
+            "Address Bus",
+            "Control Bus",
+            "Expansion Bus"
+        ],
+        answer: 1
+    },
+
+    {
+        q: "Software that provides open access to inspect, modify, and distribute its source code is called:",
+        options: [
+            "Freeware",
+            "Shareware",
+            "Open-Source Software",
+            "Proprietary Software"
+        ],
+        answer: 2
+    },
+
+    {
+        q: "What defines shareware software?",
+        options: [
+            "Completely free without restrictions forever.",
+            "Free for a limited trial period with paid options.",
+            "Source code public and free to edit.",
+            "Permanently embedded on hardware chips."
+        ],
+        answer: 1
+    },
+
+    {
+        q: "Which optical device captures physical printed photos and turns them into digital bitmap files?",
+        options: [
+            "Digitizer",
+            "Optical Scanner",
+            "Optical Character Reader (OCR)",
+            "Barcode Reader"
+        ],
+        answer: 1
+    },
+
+    {
+        q: "Which specification determines image clarity and visual detail on modern monitor screens?",
+        options: [
+            "Screen size",
+            "Pixel density (PPI)",
+            "Refresh rate",
+            "Aspect ratio"
+        ],
+        answer: 1
+    },
+
+    {
+        q: "Which input device captures precise hand-drawn graphics using a touch-sensitive stylus?",
+        options: [
+            "Touchpad",
+            "Graphics Tablet (Digitizer)",
+            "Light Pen",
+            "Trackball"
+        ],
+        answer: 1
+    },
+
+    {
+        q: "Which printer type uses heat-sensitive paper or heat-applied dye ribbon?",
+        options: [
+            "Inkjet Printer",
+            "Thermal Printer",
+            "Laser Printer",
+            "Dot Matrix Printer"
+        ],
+        answer: 1
+    },
+
+    {
+        q: "What technology does a standard optical mouse use to sense movement on surfaces?",
+        options: [
+            "Mechanical rubber ball",
+            "LED sensor and image tracking",
+            "Magnetic field sensors",
+            "Electrostatic force fields"
+        ],
+        answer: 1
+    },
+
+    {
+        q: "Which impact printer creates text characters by striking small metal pins against ink ribbon?",
+        options: [
+            "Thermal Printer",
+            "Dot Matrix Printer",
+            "Laser Printer",
+            "Plotter"
+        ],
+        answer: 1
+    },
+
+    {
+        q: "What sets an RFID reader apart from a standard barcode scanner?",
+        options: [
+            "RFID requires strict line-of-sight view.",
+            "RFID uses radio waves without direct line-of-sight.",
+            "RFID only scans printed black lines.",
+            "RFID requires physical contact."
+        ],
+        answer: 1
+    },
+
+    {
+        q: "Which RAM type requires continuous electrical refreshing to keep stored data intact?",
+        options: [
+            "Static RAM (SRAM)",
+            "Dynamic RAM (DRAM)",
+            "NVRAM",
+            "Mask ROM"
+        ],
+        answer: 1
+    },
+
+    {
+        q: "Why is Cache Memory placed between CPU registers and primary memory (RAM)?",
+        options: [
+            "To expand total secondary storage space.",
+            "To reduce data retrieval delay for frequent instructions.",
+            "To save operating system files permanently.",
+            "To prevent memory overheating."
+        ],
+        answer: 1
+    },
+
+    {
+        q: "Which non-volatile memory can be erased and reprogrammed electronically?",
+        options: [
+            "PROM",
+            "EPROM",
+            "EEPROM",
+            "Mask ROM"
+        ],
+        answer: 2
+    },
+
+    {
+        q: "What storage technology allows Solid State Drives (SSDs) to hold data without moving parts?",
+        options: [
+            "Magnetic platters",
+            "Flash Memory (NAND gates)",
+            "Optical pits and lands",
+            "Ferroelectric coils"
+        ],
+        answer: 1
+    },
+
+    {
+        q: "What is the fastest storage location inside a computer architecture?",
+        options: [
+            "L1 Cache Memory",
+            "CPU Internal Registers",
+            "L2 Cache Memory",
+            "System RAM"
+        ],
+        answer: 1
+    },
+
+    {
+        q: "What is the smallest addressable physical unit of disk storage on a hard drive track?",
+        options: [
+            "Platter",
+            "Cluster",
+            "Cylinder",
+            "Sector"
+        ],
+        answer: 3
+    },
+
+    {
+        q: "Under which storage classification does a standard Blu-ray disc fall?",
+        options: [
+            "Magnetic Storage",
+            "Solid-State Storage",
+            "Optical Storage",
+            "Flash Storage"
+        ],
+        answer: 2
+    },
+
+    {
+        q: "What is Virtual Memory?",
+        options: [
+            "High-speed ROM chip located near the CPU.",
+            "Hard drive space managed by OS as temporary RAM.",
+            "Remote cloud storage backup system.",
+            "Physical RAM module plugged into motherboard."
+        ],
+        answer: 1
+    },
+
+    {
+        q: "Which physical network topology connects all nodes directly to a central hub or switch?",
+        options: [
+            "Bus Topology",
+            "Star Topology",
+            "Ring Topology",
+            "Mesh Topology"
+        ],
+        answer: 1
+    },
+
+    {
+        q: "Which networking device operates at Layer 3 (Network Layer) to route data packets between subnets?",
+        options: [
+            "Switch",
+            "Hub",
+            "Router",
+            "Repeater"
+        ],
+        answer: 2
+    },
+
+    {
+        q: "Which network protocol automatically assigns dynamic IP address parameters to connected host devices?",
+        options: [
+            "DNS",
+            "DHCP",
+            "FTP",
+            "SMTP"
+        ],
+        answer: 1
+    },
+
+    {
+        q: "What is a key structural difference between TCP and UDP protocols?",
+        options: [
+            "TCP is connectionless; UDP is connection-oriented.",
+            "TCP guarantees packet delivery; UDP does not guarantee delivery.",
+            "TCP runs faster than UDP without error checks.",
+            "TCP operates on Link Layer; UDP on Application Layer."
+        ],
+        answer: 1
+    },
+
+    {
+        q: "What network coverage size spans across a whole metropolitan city area?",
+        options: [
+            "LAN",
+            "MAN",
+            "WAN",
+            "PAN"
+        ],
+        answer: 1
+    },
+
+    {
+        q: "Which networking device blindly retransmits incoming data frames to every connected network port?",
+        options: [
+            "Network Switch",
+            "Network Hub",
+            "Router",
+            "Bridge"
+        ],
+        answer: 1
+    },
+
+    {
+        q: "What is the primary function of the Domain Name System (DNS)?",
+        options: [
+            "Translates readable domain names into IP addresses.",
+            "Encrypts web browser transmission streams.",
+            "Downloads web documents from internet servers.",
+            "Blocks unauthorized network access."
+        ],
+        answer: 0
+    },
+
+    {
+        q: "Which standard IPv4 IP address is reserved for local machine loopback testing?",
+        options: [
+            "192.168.1.1",
+            "127.0.0.1",
+            "10.0.0.1",
+            "255.255.255.255"
+        ],
+        answer: 1
+    },
+
+    {
+        q: "Which cloud service model delivers complete user application software on-demand over the internet?",
+        options: [
+            "Infrastructure as a Service (IaaS)",
+            "Platform as a Service (PaaS)",
+            "Software as a Service (SaaS)",
+            "Function as a Service (FaaS)"
+        ],
+        answer: 2
+    },
+
+    {
+        q: "Which technology framework enables smart physical devices to collect and share data automatically over the internet?",
+        options: [
+            "Virtual Reality (VR)",
+            "Internet of Things (IoT)",
+            "E-Commerce",
+            "Grid Computing"
+        ],
+        answer: 1
+    },
+
+    {
+        q: "Which security protocol requires two independent identity credentials before granting account access?",
+        options: [
+            "Single Sign-On (SSO)",
+            "Two-Factor Authentication (2FA)",
+            "Public Key Infrastructure",
+            "Biometric Hashing"
+        ],
+        answer: 1
+    },
+
+    {
+        q: "What system allows real-time electronic banking transactions without physical branch presence?",
+        options: [
+            "E-Learning",
+            "E-Banking",
+            "E-Governance",
+            "Telemedicine"
+        ],
+        answer: 1
+    },
+
+    {
+        q: "What is the primary objective of E-Governance in public service management?",
+        options: [
+            "Selling official hardware supplies online.",
+            "Delivering government services digitally to public citizens.",
+            "Automating manufacturing plants.",
+            "Controlling smart grid electrical systems."
+        ],
+        answer: 1
+    },
+
+    {
+        q: "Which system enables remote patient health monitoring and medical advice over secure digital channels?",
+        options: [
+            "E-Commerce",
+            "Telemedicine",
+            "Bio-Computing",
+            "Cloud Archiving"
+        ],
+        answer: 1
+    },
+
+    {
+        q: "Which cyber threat trick users into revealing sensitive passwords via fraudulent fake communications?",
+        options: [
+            "Ransomware",
+            "Phishing",
+            "Spyware",
+            "Trojan Horse"
+        ],
+        answer: 1
+    }
+
+];
+
+
+/* =========================================================
+   BASIC DATA CHECK
+   Prevents accidental deployment if MCQ count changes.
+========================================================= */
+
+if (questions.length !== 50) {
+    console.error("Quiz configuration error: exactly 50 questions are required.");
+}
+
+
+/* =========================================================
+   APPLICATION STATE
+========================================================= */
+
+const state = {
+    currentQuestion: 0,
+    selectedAnswers: new Array(questions.length).fill(null),
+    startTime: null,
+    timerInterval: null,
+    remainingSeconds: 50 * 60,
+    submitted: false
+};
+
+const student = {
+    name: "",
+    className: "",
+    rollNo: "",
+    school: "",
+    subject: ""
+};
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const welcomeScreen = document.getElementById("welcomeScreen");
+const detailsScreen = document.getElementById("detailsScreen");
+const quizScreen = document.getElementById("quizScreen");
+const submissionScreen = document.getElementById("submissionScreen");
+
+const startBtn = document.getElementById("startBtn");
+
+const studentName = document.getElementById("studentName");
+const studentClass = document.getElementById("studentClass");
+const rollNo = document.getElementById("rollNo");
+const school = document.getElementById("school");
+const subject = document.getElementById("subject");
+
+const detailSteps = document.querySelectorAll(".field-step");
+const progressDots = document.querySelectorAll(".progress-dot");
+
+const beginQuizBtn = document.getElementById("beginQuizBtn");
+
+const questionCounter = document.getElementById("questionCounter");
+const questionLabel = document.getElementById("questionLabel");
+const questionText = document.getElementById("questionText");
+const optionsContainer = document.getElementById("optionsContainer");
+const nextQuestionBtn = document.getElementById("nextQuestionBtn");
+const progressFill = document.getElementById("progressFill");
+const timerDisplay = document.getElementById("timerDisplay");
+const lockedNote = document.getElementById("lockedNote");
+
+const timeToast = document.getElementById("timeToast");
+const toastText = document.getElementById("toastText");
+
+
+/* =========================================================
+   SCREEN SWITCHING
+========================================================= */
+
+function showScreen(screen) {
+    document.querySelectorAll(".screen").forEach(function(item) {
+        item.classList.remove("active");
+    });
+
+    screen.classList.add("active");
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+/* =========================================================
+   WELCOME -> DETAILS
+========================================================= */
+
+startBtn.addEventListener("click", function() {
+    showScreen(detailsScreen);
+    studentName.focus();
+});
+
+
+/* =========================================================
+   DETAIL STEPS
+========================================================= */
+
+let currentDetailStep = 0;
+
+function showDetailStep(index) {
+    currentDetailStep = index;
+
+    detailSteps.forEach(function(step, i) {
+        step.classList.toggle("active", i === index);
+    });
+
+    progressDots.forEach(function(dot, i) {
+        dot.classList.toggle("active", i === index);
+    });
+
+    const activeInput = detailSteps[index].querySelector("input, select");
+
+    if (activeInput) {
+        setTimeout(function() {
+            activeInput.focus();
+        }, 120);
+    }
+}
+
+function valueIsValid(element) {
+    return element.value.trim() !== "";
+}
+
+document.querySelectorAll(".next-detail").forEach(function(button) {
+
+    button.addEventListener("click", function() {
+
+        const activeStep = detailSteps[currentDetailStep];
+        const field = activeStep.querySelector("input, select");
+
+        if (!field || !valueIsValid(field)) {
+            field.focus();
+            return;
+        }
+
+        if (currentDetailStep < detailSteps.length - 1) {
+            showDetailStep(currentDetailStep + 1);
+        }
+
+    });
+
+});
+
+
+/* =========================================================
+   START QUIZ
+========================================================= */
+
+beginQuizBtn.addEventListener("click", function() {
+
+    if (!subject.value) {
+        subject.focus();
+        return;
+    }
+
+    student.name = studentName.value.trim();
+    student.className = studentClass.value;
+    student.rollNo = rollNo.value.trim();
+    student.school = school.value.trim();
+    student.subject = subject.value;
+
+    state.currentQuestion = 0;
+    state.selectedAnswers = new Array(questions.length).fill(null);
+    state.remainingSeconds = 50 * 60;
+    state.submitted = false;
+    state.startTime = new Date();
+
+    showScreen(quizScreen);
+
+    renderQuestion();
+    startTimer();
+
+});
+
+
+/* =========================================================
+   RENDER QUESTION
+========================================================= */
+
+function renderQuestion() {
+
+    const question = questions[state.currentQuestion];
+    const questionNumber = state.currentQuestion + 1;
+
+    questionCounter.textContent =
+        "Question " + questionNumber + " of " + questions.length;
+
+    questionLabel.textContent =
+        "Question " + String(questionNumber).padStart(2, "0");
+
+    questionText.textContent = question.q;
+
+    optionsContainer.innerHTML = "";
+    lockedNote.textContent = "";
+
+    question.options.forEach(function(optionText, index) {
+
+        const optionButton = document.createElement("button");
+
+        optionButton.type = "button";
+        optionButton.className = "option";
+
+        const letter = document.createElement("span");
+        letter.className = "option-letter";
+        letter.textContent = String.fromCharCode(65 + index);
+
+        const text = document.createElement("span");
+        text.className = "option-text";
+        text.textContent = optionText;
+
+        optionButton.appendChild(letter);
+        optionButton.appendChild(text);
+
+        optionButton.addEventListener("click", function() {
+            selectAnswer(index);
+        });
+
+        optionsContainer.appendChild(optionButton);
+    });
+
+    const selected = state.selectedAnswers[state.currentQuestion];
+
+    if (selected !== null) {
+        lockCurrentQuestion(selected);
+    }
+
+    const progress =
+        ((state.currentQuestion + 1) / questions.length) * 100;
+
+    progressFill.style.width = progress + "%";
+
+    nextQuestionBtn.disabled = selected === null;
+
+    if (state.currentQuestion === questions.length - 1) {
+        nextQuestionBtn.textContent = "Submit Quiz";
+    } else {
+        nextQuestionBtn.textContent = "Next";
+    }
+}
+
+
+/* =========================================================
+   SELECT + LOCK ANSWER
+========================================================= */
+
+function selectAnswer(index) {
+
+    if (state.selectedAnswers[state.currentQuestion] !== null) {
+        return;
+    }
+
+    state.selectedAnswers[state.currentQuestion] = index;
+
+    lockCurrentQuestion(index);
+}
+
+
+function lockCurrentQuestion(index) {
+
+    const allOptions = document.querySelectorAll(".option");
+
+    allOptions.forEach(function(option, optionIndex) {
+
+        option.classList.add("locked");
+
+        if (optionIndex === index) {
+            option.classList.add("selected");
+        }
+
+    });
+
+    lockedNote.textContent =
+        "Answer selected and locked.";
+
+    nextQuestionBtn.disabled = false;
+}
+
+
+/* =========================================================
+   NEXT QUESTION
+========================================================= */
+
+nextQuestionBtn.addEventListener("click", function() {
+
+    if (state.selectedAnswers[state.currentQuestion] === null) {
+        return;
+    }
+
+    if (state.currentQuestion < questions.length - 1) {
+
+        state.currentQuestion++;
+
+        renderQuestion();
+
+        const questionCard = document.querySelector(".question-card");
+
+        questionCard.style.animation = "none";
+
+        requestAnimationFrame(function() {
+            questionCard.style.animation = "screenIn 0.4s ease both";
+        });
+
+    } else {
+
+        finishQuiz();
+
+    }
+
+});
+
+
+/* =========================================================
+   TIMER
+========================================================= */
+
+function startTimer() {
+
+    clearInterval(state.timerInterval);
+
+    updateTimerDisplay();
+
+    state.timerInterval = setInterval(function() {
+
+        if (state.submitted) {
+            clearInterval(state.timerInterval);
+            return;
+        }
+
+        state.remainingSeconds--;
+
+        updateTimerDisplay();
+
+        if (state.remainingSeconds > 0 &&
+            state.remainingSeconds % 60 === 0) {
+
+            const minutes = state.remainingSeconds / 60;
+
+            showTimeAnnouncement(
+                minutes + (minutes === 1 ? " minute" : " minutes") +
+                " remaining."
+            );
+        }
+
+        if (state.remainingSeconds <= 0) {
+
+            state.remainingSeconds = 0;
+
+            updateTimerDisplay();
+
+            clearInterval(state.timerInterval);
+
+            showTimeAnnouncement("Time is over. Your quiz is being submitted.");
+
+            setTimeout(function() {
+                finishQuiz(true);
+            }, 1200);
+
+        }
+
+    }, 1000);
+}
+
+
+function updateTimerDisplay() {
+
+    const minutes = Math.floor(state.remainingSeconds / 60);
+    const seconds = state.remainingSeconds % 60;
+
+    timerDisplay.textContent =
+        String(minutes).padStart(2, "0") +
+        ":" +
+        String(seconds).padStart(2, "0");
+}
+
+
+/* =========================================================
+   TIME ANNOUNCEMENT
+========================================================= */
+
+let toastTimeout = null;
+
+function showTimeAnnouncement(message) {
+
+    toastText.textContent = message;
+
+    timeToast.classList.add("show");
+
+    clearTimeout(toastTimeout);
+
+    toastTimeout = setTimeout(function() {
+        timeToast.classList.remove("show");
+    }, 4500);
+}
+
+
+/* =========================================================
+   CALCULATE RESULT
+   Result is NEVER shown to student.
+========================================================= */
+
+function calculateResult() {
+
+    let correct = 0;
+
+    questions.forEach(function(question, index) {
+
+        if (state.selectedAnswers[index] === question.answer) {
+            correct++;
+        }
+
+    });
+
+    const wrong = questions.length - correct;
+
+    return {
+        correct: correct,
+        wrong: wrong,
+        score: correct + " / " + questions.length
+    };
+}
+
+
+/* =========================================================
+   TIME TAKEN
+========================================================= */
+
+function getTimeTaken() {
+
+    const totalSeconds = 50 * 60;
+    const usedSeconds = totalSeconds - state.remainingSeconds;
+
+    const minutes = Math.floor(usedSeconds / 60);
+    const seconds = usedSeconds % 60;
+
+    return (
+        String(minutes).padStart(2, "0") +
+        " minutes " +
+        String(seconds).padStart(2, "0") +
+        " seconds"
+    );
+}
+
+
+/* =========================================================
+   EMAILJS SUBMISSION
+========================================================= */
+
+async function sendResultEmail() {
+
+    const result = calculateResult();
+
+    const templateParams = {
+
+        student_name: student.name,
+
+        class_name: student.className,
+
+        roll_no: student.rollNo,
+
+        school: student.school,
+
+        subject: student.subject,
+
+        total_questions: String(questions.length),
+
+        correct_answers: String(result.correct),
+
+        wrong_answers: String(result.wrong),
+
+        score: result.score,
+
+        time_taken: getTimeTaken(),
+
+        status: "Quiz completed and submitted.",
+
+        submitted_at: new Date().toLocaleString("en-PK", {
+            dateStyle: "medium",
+            timeStyle: "short"
+        })
+
+    };
+
+    return emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        templateParams
+    );
+}
+
+
+/* =========================================================
+   FINISH QUIZ
+========================================================= */
+
+async function finishQuiz(timeExpired = false) {
+
+    if (state.submitted) {
+        return;
+    }
+
+    state.submitted = true;
+
+    clearInterval(state.timerInterval);
+
+    /*
+       Calculate result internally.
+       Student will NEVER see these values.
+    */
+
+    const result = calculateResult();
+
+    try {
+
+        await sendResultEmail();
+
+        showScreen(submissionScreen);
+
+    } catch (error) {
+
+        /*
+           No technical EmailJS error is exposed to the student.
+           We log it for the administrator/developer only.
+        */
+
+        console.error("Result submission error:", error);
+
+        /*
+           A retry is attempted automatically once.
+        */
+
+        try {
+
+            await new Promise(function(resolve) {
+                setTimeout(resolve, 1000);
+            });
+
+            await sendResultEmail();
+
+            showScreen(submissionScreen);
+
+        } catch (retryError) {
+
+            console.error(
+                "Result submission retry failed:",
+                retryError
+            );
+
+            /*
+               Keep the user-facing interface calm and professional.
+               No red alert and no service name is exposed.
+            */
+
+            showScreen(submissionScreen);
+        }
+    }
+}
+
+
+/* =========================================================
+   PREVENT ACCIDENTAL DOUBLE SUBMISSION
+========================================================= */
+
+window.addEventListener("beforeunload", function(event) {
+
+    if (
+        quizScreen.classList.contains("active") &&
+        !state.submitted
+    ) {
+        event.preventDefault();
+        event.returnValue = "";
+    }
+
+});
+
+
+/* =========================================================
+   KEYBOARD SAFETY
+   Enter can move detail steps, but cannot change a locked answer.
+========================================================= */
+
+document.addEventListener("keydown", function(event) {
+
+    if (event.key !== "Enter") {
+        return;
+    }
+
+    if (detailsScreen.classList.contains("active")) {
+
+        const activeStep = detailSteps[currentDetailStep];
+        const button = activeStep.querySelector("button");
+
+        if (button) {
+            button.click();
+        }
+
+    }
+
+});
+
+
+/* =========================================================
+   INITIAL STATE
+========================================================= */
+
+showDetailStep(0);
+
+</script>
+
+</body>
+  </html>
